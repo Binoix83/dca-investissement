@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="DCA Invest" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>DCA Investissement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #0a0e1a;
+      --card: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.08);
+      --text: #E2E8F0;
+      --muted: #64748B;
+      --subtle: #475569;
+      --blue: #3B82F6;
+      --green: #14B87B;
+      --red: #E60028;
+      --amber: #F59E0B;
+      --purple: #8B5CF6;
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+    body { background: linear-gradient(135deg, #0a0e1a 0%, #111827 50%, #0d1117 100%); min-height: 100vh; padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+
+    .app { max-width: 480px; margin: 0 auto; padding: 20px 16px 100px; }
+
+    /* Header */
+    .header { margin-bottom: 24px; }
+    .header-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 8px var(--blue); display: inline-block; margin-right: 8px; }
+    .header-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .header h1 { font-size: 26px; font-weight: 700; background: linear-gradient(135deg, #E2E8F0, #94A3B8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 4px 0 2px; }
+    .header p { font-size: 13px; color: var(--subtle); }
+
+    /* Cards */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 14px; }
+
+    /* Monthly input */
+    .monthly-label { font-size: 13px; color: #94A3B8; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .monthly-input-wrap { display: flex; align-items: center; gap: 6px; }
+    .monthly-input { width: 90px; background: #0F172A; border: 1px solid #334155; border-radius: 8px; color: var(--text); padding: 6px 10px; font-size: 20px; font-family: 'DM Mono', monospace; font-weight: 500; text-align: right; outline: none; -moz-appearance: textfield; }
+    .monthly-input::-webkit-outer-spin-button, .monthly-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .euro { font-size: 18px; color: var(--muted); }
+    input[type=range] { -webkit-appearance: none; width: 100%; height: 4px; background: #1E293B; border-radius: 2px; outline: none; margin: 8px 0 4px; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: var(--blue); border-radius: 50%; cursor: pointer; box-shadow: 0 0 6px rgba(59,130,246,0.5); }
+    .range-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--subtle); }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; }
+    .stat-val { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; }
+    .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.07em; }
+
+    /* Warning */
+    .warn-box { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--amber); }
+    .normalize-btn { background: var(--amber); color: #000; border: none; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 6px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 4px; margin-bottom: 16px; }
+    .tab { flex: 1; padding: 9px 4px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: 500; border: none; background: transparent; color: var(--muted); transition: all 0.2s; }
+    .tab.active { background: var(--blue); color: white; }
+
+    /* Platform section */
+    .platform-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .platform-title { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; }
+    .platform-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; }
+    .platform-amount { font-family: 'DM Mono', monospace; font-size: 13px; color: #94A3B8; }
+
+    /* Asset rows */
+    .asset-row { padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .asset-row:last-child { border-bottom: none; }
+    .asset-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .asset-name { font-size: 13px; font-weight: 500; }
+    .asset-cat { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .asset-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+    .pct-wrap { display: flex; align-items: center; gap: 5px; }
+    .pct-input { width: 44px; background: #0F172A; border: 1px solid #1E293B; border-radius: 6px; color: #94A3B8; padding: 3px 5px; font-size: 12px; font-family: 'DM Mono', monospace; text-align: center; outline: none; -moz-appearance: textfield; }
+    .pct-input::-webkit-outer-spin-button, .pct-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .pct-label { font-size: 11px; color: var(--subtle); }
+    .amount-chip { font-family: 'DM Mono', monospace; font-size: 12px; padding: 3px 9px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); border-radius: 7px; color: #93C5FD; }
+
+    /* Detail tab */
+    .detail-card { border-left: 3px solid; border-radius: 12px; padding: 14px; margin-bottom: 10px; background: var(--card); border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .detail-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+    .detail-name { font-weight: 600; font-size: 14px; }
+    .detail-cat { font-size: 11px; color: var(--subtle); margin-top: 2px; }
+    .detail-amount { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 600; text-align: right; }
+    .detail-pct { font-size: 11px; color: var(--subtle); text-align: right; }
+    .detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .detail-box { background: #0F172A; border-radius: 8px; padding: 8px; }
+    .detail-box-label { font-size: 9px; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+    .detail-box-val { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; }
+    .total-fees-card { background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.2); border-radius: 12px; padding: 14px; }
+    .total-fees-row { display: flex; justify-content: space-between; align-items: center; }
+    .total-fees-sub { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: var(--subtle); }
+
+    /* Projection tab */
+    .proj-chart { display: flex; gap: 8px; align-items: flex-end; height: 150px; margin: 16px 0 8px; }
+    .proj-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+    .proj-bar-val { font-size: 10px; color: #94A3B8; font-family: 'DM Mono', monospace; }
+    .proj-bar-fill { width: 100%; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, var(--blue), #1D4ED8); transition: height 0.3s; }
+    .proj-bar-label { font-size: 10px; color: var(--subtle); }
+    .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .proj-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; }
+    .proj-card-label { font-size: 11px; color: var(--subtle); margin-bottom: 4px; }
+    .proj-card-val { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 600; color: var(--blue); }
+    .proj-card-sub { font-size: 10px; color: var(--subtle); margin-top: 4px; }
+    .proj-note { background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2); border-radius: 10px; padding: 12px; font-size: 12px; color: #6EE7B7; line-height: 1.6; margin-top: 12px; }
+
+    .footer { text-align: center; font-size: 10px; color: #334155; margin-top: 24px; }
+
+    /* Bottom nav safe area */
+    .bottom-safe { height: env(safe-area-inset-bottom); }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <div class="header">
+    <div><span class="header-dot"></span><span class="header-label">Outil DCA Personnalisé</span></div>
+    <h1>Planificateur DCA</h1>
+    <p>PEA Société Générale · CTO Trade Republic</p>
+  </div>
+
+  <!-- Monthly Input -->
+  <div class="card">
+    <div class="monthly-label">
+      <span>Montant mensuel</span>
+      <div class="monthly-input-wrap">
+        <input class="monthly-input" type="number" id="monthlyInput" value="200" min="10" max="2000" step="10" oninput="setMonthly(this.value)" />
+        <span class="euro">€</span>
+      </div>
+    </div>
+    <input type="range" id="monthlySlider" min="10" max="2000" step="10" value="200" oninput="setMonthly(this.value)" />
+    <div class="range-labels"><span>10 €</span><span>2 000 €</span></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="statTotal" style="color:#E2E8F0">200 €</div><div class="stat-lbl">Investi/mois</div></div>
+    <div class="stat-card"><div class="stat-val" id="statSG" style="color:#E60028">— €</div><div class="stat-lbl">→ PEA SG</div></div>
+    <div class="stat-card"><div class="stat-val" id="statTR" style="color:#14B87B">— €</div><div class="stat-lbl">→ CTO TR</div></div>
+    <div class="stat-card"><div class="stat-val" id="statFees" style="color:#F59E0B">— €</div><div class="stat-lbl">Frais/mois</div></div>
+  </div>
+
+  <!-- Warning -->
+  <div class="warn-box" id="warnBox" style="display:none">
+    <span id="warnText"></span>
+    <button class="normalize-btn" onclick="normalize()">Normaliser</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" id="tab-repartition" onclick="switchTab('repartition')">Répartition</button>
+    <button class="tab" id="tab-detail" onclick="switchTab('detail')">Détail</button>
+    <button class="tab" id="tab-projection" onclick="switchTab('projection')">Projection</button>
+  </div>
+
+  <!-- Tab Contents -->
+  <div id="content-repartition"></div>
+  <div id="content-detail" style="display:none"></div>
+  <div id="content-projection" style="display:none"></div>
+
+  <div class="footer">Outil indicatif · Pas un conseil financier réglementé · Juin 2026</div>
+  <div class="bottom-safe"></div>
+</div>
+
+<script>
+const PLATFORMS = {
+  SG: { name: "PEA Société Générale", fee: 0.0035, color: "#E60028", badge: "PEA" },
+  TR: { name: "CTO Trade Republic", fee: 0, color: "#14B87B", badge: "CTO" },
+};
+
+const CATEGORY_COLORS = {
+  "ETF Monde": "#3B82F6", "ETF Émergents": "#8B5CF6",
+  "Big Tech": "#F59E0B", "Asie": "#EF4444",
+  "Or": "#D97706", "Thématique": "#10B981", "Satellite": "#6B7280",
+};
+
+const ASSETS = [
+  { id: "wpea",       name: "WPEA – iShares MSCI World",     platform: "SG", ter: 0.002,  category: "ETF Monde",    defaultPct: 56 },
+  { id: "aeem",       name: "AEEM – Amundi Emerging Markets",platform: "SG", ter: 0.002,  category: "ETF Émergents",defaultPct: 14 },
+  { id: "nvidia",     name: "NVIDIA",                         platform: "TR", ter: 0,      category: "Big Tech",     defaultPct: 7  },
+  { id: "apple",      name: "Apple",                          platform: "TR", ter: 0,      category: "Big Tech",     defaultPct: 7  },
+  { id: "alphabet",   name: "Alphabet",                       platform: "TR", ter: 0,      category: "Big Tech",     defaultPct: 4  },
+  { id: "byd",        name: "BYD",                            platform: "TR", ter: 0,      category: "Asie",         defaultPct: 3  },
+  { id: "gold",       name: "Physical Gold ETF",              platform: "TR", ter: 0.0012, category: "Or",           defaultPct: 3  },
+  { id: "ai",         name: "AI & Big Data ETF",              platform: "TR", ter: 0.0035, category: "Thématique",   defaultPct: 2  },
+  { id: "water",      name: "Global Water ETF",               platform: "TR", ter: 0.0035, category: "Thématique",   defaultPct: 2  },
+  { id: "blockchain", name: "Blockchain Technology ETF",      platform: "TR", ter: 0.0065, category: "Thématique",   defaultPct: 1  },
+  { id: "tesla",      name: "Tesla",                          platform: "TR", ter: 0,      category: "Satellite",    defaultPct: 0  },
+  { id: "palantir",   name: "Palantir",                       platform: "TR", ter: 0,      category: "Satellite",    defaultPct: 0  },
+  { id: "ge",         name: "GE Aerospace",                   platform: "TR", ter: 0,      category: "Satellite",    defaultPct: 1  },
+];
+
+let monthly = 200;
+let allocations = {};
+ASSETS.forEach(a => allocations[a.id] = a.defaultPct);
+
+let currentTab = "repartition";
+
+function setMonthly(val) {
+  monthly = Math.max(10, Math.min(2000, Number(val)));
+  document.getElementById("monthlyInput").value = monthly;
+  document.getElementById("monthlySlider").value = monthly;
+  update();
+}
+
+function getTotal() {
+  return Object.values(allocations).reduce((a, b) => a + b, 0);
+}
+
+function normalize() {
+  const t = getTotal();
+  if (t === 0) return;
+  const factor = 100 / t;
+  ASSETS.forEach(a => { allocations[a.id] = Math.round(allocations[a.id] * factor); });
+  update();
+}
+
+function calcResults() {
+  return ASSETS.map(asset => {
+    const pct = (allocations[asset.id] || 0) / 100;
+    const gross = monthly * pct;
+    const plat = PLATFORMS[asset.platform];
+    const courtage = asset.platform === "SG" ? gross * plat.fee : 0;
+    const net = gross - courtage;
+    const annualTER = net * asset.ter * 12;
+    return { ...asset, pct, gross, courtage, net, annualTER };
+  });
+}
+
+function update() {
+  const results = calcResults();
+  const total = getTotal();
+  const sgTotal = results.filter(r => r.platform === "SG").reduce((a, r) => a + r.gross, 0);
+  const trTotal = results.filter(r => r.platform === "TR").reduce((a, r) => a + r.gross, 0);
+  const totalCourtage = results.reduce((a, r) => a + r.courtage, 0);
+
+  document.getElementById("statTotal").textContent = monthly + " €";
+  document.getElementById("statSG").textContent = sgTotal.toFixed(0) + " €";
+  document.getElementById("statTR").textContent = trTotal.toFixed(0) + " €";
+  document.getElementById("statFees").textContent = totalCourtage.toFixed(2) + " €";
+
+  const warn = document.getElementById("warnBox");
+  if (total !== 100) {
+    warn.style.display = "flex";
+    document.getElementById("warnText").textContent = "⚠ Total : " + total + "% (doit être 100%)";
+  } else {
+    warn.style.display = "none";
+  }
+
+  renderRepartition(results, sgTotal, trTotal);
+  renderDetail(results, totalCourtage);
+  renderProjection(totalCourtage);
+}
+
+function renderRepartition(results, sgTotal, trTotal) {
+  const platTotals = { SG: sgTotal, TR: trTotal };
+  let html = "";
+  ["SG", "TR"].forEach(plat => {
+    const p = PLATFORMS[plat];
+    const assets = ASSETS.filter(a => a.platform === plat);
+    html += `<div class="card">
+      <div class="platform-header">
+        <div class="platform-title">
+          <div class="platform-dot" style="background:${p.color}"></div>
+          ${p.name}
+          <span class="badge" style="background:${p.color}22;color:${p.color}">${p.badge}</span>
+        </div>
+        <span class="platform-amount">${platTotals[plat].toFixed(0)} €/mois</span>
+      </div>`;
+    assets.forEach(asset => {
+      const pct = allocations[asset.id] || 0;
+      const amt = (pct / 100 * monthly).toFixed(2);
+      const cc = CATEGORY_COLORS[asset.category];
+      html += `<div class="asset-row">
+        <div class="asset-top">
+          <div>
+            <div class="asset-name">${asset.name}</div>
+            <div class="asset-cat" style="color:${cc}">${asset.category}</div>
+          </div>
+          <div class="asset-right">
+            <div class="pct-wrap">
+              <input class="pct-input" type="number" min="0" max="100" value="${pct}"
+                oninput="allocations['${asset.id}']=Math.max(0,Math.min(100,Number(this.value)));update()" />
+              <span class="pct-label">%</span>
+            </div>
+            <span class="amount-chip">${amt} €</span>
+          </div>
+        </div>
+        <input type="range" min="0" max="70" step="1" value="${pct}"
+          oninput="allocations['${asset.id}']=Number(this.value);update()" />
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  document.getElementById("content-repartition").innerHTML = html;
+}
+
+function renderDetail(results, totalCourtage) {
+  const active = results.filter(r => r.gross > 0);
+  const totalAnnualTER = active.reduce((a, r) => a + r.annualTER, 0);
+  let html = "";
+  active.forEach(r => {
+    const cc = CATEGORY_COLORS[r.category];
+    const p = PLATFORMS[r.platform];
+    html += `<div class="detail-card" style="border-left-color:${cc}">
+      <div class="detail-header">
+        <div>
+          <div class="detail-name">${r.name} <span class="badge" style="background:${p.color}22;color:${p.color};margin-left:4px">${p.badge}</span></div>
+          <div class="detail-cat">${r.category}</div>
+        </div>
+        <div>
+          <div class="detail-amount">${r.gross.toFixed(2)} €</div>
+          <div class="detail-pct">${(r.pct * 100).toFixed(0)}% du budget</div>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-box">
+          <div class="detail-box-label">Courtage</div>
+          <div class="detail-box-val" style="color:${r.courtage > 0 ? '#EF4444' : '#10B981'}">${r.courtage > 0 ? '-' + r.courtage.toFixed(2) : '0,00'} €</div>
+        </div>
+        <div class="detail-box">
+          <div class="detail-box-label">Net investi</div>
+          <div class="detail-box-val" style="color:#3B82F6">${r.net.toFixed(2)} €</div>
+        </div>
+        <div class="detail-box">
+          <div class="detail-box-label">TER/an</div>
+          <div class="detail-box-val" style="color:${r.ter > 0 ? '#F59E0B' : '#10B981'}">${r.ter > 0 ? '-' + r.annualTER.toFixed(2) : '0,00'} €</div>
+        </div>
+      </div>
+    </div>`;
+  });
+  html += `<div class="total-fees-card">
+    <div class="total-fees-row">
+      <span style="font-weight:600;color:#93C5FD">Frais annuels totaux</span>
+      <span style="font-family:'DM Mono',monospace;font-size:16px;font-weight:600;color:#EF4444">-${(totalCourtage * 12 + totalAnnualTER).toFixed(2)} €/an</span>
+    </div>
+    <div class="total-fees-sub">
+      <span>Courtage SG : <span style="color:#94A3B8">${(totalCourtage * 12).toFixed(2)} €/an</span></span>
+      <span>TER ETF : <span style="color:#94A3B8">${totalAnnualTER.toFixed(2)} €/an</span></span>
+    </div>
+  </div>`;
+  document.getElementById("content-detail").innerHTML = html;
+}
+
+function renderProjection(totalCourtage) {
+  const netMonthly = monthly - totalCourtage;
+  const months = [12, 24, 36, 60, 120, 240];
+  const rate = 0.07 / 12;
+  const data = months.map(m => {
+    let val = 0;
+    for (let i = 0; i < m; i++) val = (val + netMonthly) * (1 + rate);
+    return { m, label: m >= 12 ? (m / 12) + "a" : m + "m", value: Math.round(val) };
+  });
+  const maxVal = data[data.length - 1].value;
+
+  let barsHtml = data.map(d => {
+    const h = Math.max(8, Math.round((d.value / maxVal) * 120));
+    const lbl = d.value >= 1000 ? (d.value / 1000).toFixed(0) + "k" : d.value;
+    return `<div class="proj-bar-wrap">
+      <div class="proj-bar-val">${lbl}€</div>
+      <div class="proj-bar-fill" style="height:${h}px"></div>
+      <div class="proj-bar-label">${d.label}</div>
+    </div>`;
+  }).join("");
+
+  let cardsHtml = data.slice(3).map(d => {
+    const invested = Math.round(netMonthly * d.m);
+    const gains = d.value - invested;
+    const lbl = d.value >= 1000 ? (d.value / 1000).toFixed(1) + "k €" : d.value + " €";
+    return `<div class="proj-card">
+      <div class="proj-card-label">Dans ${d.label}</div>
+      <div class="proj-card-val">${lbl}</div>
+      <div class="proj-card-sub">investi : ${invested.toLocaleString()} € · gains : +${gains.toLocaleString()} €</div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("content-projection").innerHTML = `
+    <div class="card">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Projection à 7%/an · scénario intermédiaire</div>
+      <div class="proj-chart">${barsHtml}</div>
+    </div>
+    <div class="proj-grid">${cardsHtml}</div>
+    <div class="proj-note">💡 ${monthly} €/mois · 7%/an · frais déduits. L'avantage fiscal PEA (17,2% vs 30%) n'est pas intégré — ton gain réel sera encore plus élevé.</div>
+  `;
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  ["repartition", "detail", "projection"].forEach(t => {
+    document.getElementById("content-" + t).style.display = t === tab ? "block" : "none";
+    document.getElementById("tab-" + t).className = "tab" + (t === tab ? " active" : "");
+  });
+}
+
+// Init
+update();
+</script>
+</body>
+</html>
